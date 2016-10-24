@@ -23,5 +23,6 @@ public class EnemyScript : MonoBehaviour
         Rigidbody2D rb;
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(dx < 0 ? -moveSpeed : moveSpeed, dy < 0 ? -moveSpeed : moveSpeed);
+        rb.velocity = Toolbox.Instance.confineVelocity(moveSpeed, rb.velocity);
     }
 }
