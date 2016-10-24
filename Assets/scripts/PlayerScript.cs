@@ -48,6 +48,8 @@ public class PlayerScript : MonoBehaviour
             grow();
         else if (Input.GetKeyUp(KeyCode.R))
             reduce();
+        else if (Input.GetKeyUp(KeyCode.B))
+            bleed();
     }
 
     // public functions
@@ -60,7 +62,7 @@ public class PlayerScript : MonoBehaviour
         // validate level
         if (level < 0 || level >= 9)
         {
-            Debug.LogError("PlayerScript.setSizeLevel(): sizeLevel must >=0 and < 9!!!");
+            Debug.LogWarning("PlayerScript.setSizeLevel(): sizeLevel must >=0 and < 9!!!");
             return;
         }
         // set size level
@@ -78,5 +80,9 @@ public class PlayerScript : MonoBehaviour
     public void reduce()
     {
         setSizeLevel(sizeLevel - 1);
+    }
+    public void bleed()
+    {
+
     }
 }
