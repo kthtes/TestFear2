@@ -19,6 +19,8 @@ public class Toolbox : Singleton<Toolbox>
         float theta = Mathf.Atan2(vel.y, vel.x);
         return new Vector2(speed * Mathf.Cos(theta), speed * Mathf.Sin(theta));
     }
+
+
     // (optional) allow runtime registration of global objects
     //static public T RegisterComponent<T>() where T : Component
     //{
