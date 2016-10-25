@@ -16,7 +16,8 @@ public class EnemyScript :  PlayerScript
 	// Update is called once per frame
 	void Update()
     {
-		adjustFace();
+        nav.destination = player.pos2();
+        adjustFace();
     }
 	void adjustFace()
 	{		
