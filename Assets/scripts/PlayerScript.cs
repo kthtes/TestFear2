@@ -4,6 +4,8 @@ using System.Collections;
 abstract public class PlayerScript : MonoBehaviour
 {  // You's attributes
     public int sizeLevel = 0;
+	public float sizeGrowFactor = 1.5f;
+	public float speedGrowFactor = 1.7f;
 	public float moveSpeed = 1.5f;
 	public float someFloat;
 
@@ -27,15 +29,11 @@ abstract public class PlayerScript : MonoBehaviour
         }
         // set size level
         sizeLevel = level;
-        float size = 0.1f * Mathf.Pow(1.5f, level);
+        float size = 0.1f * Mathf.Pow(sizeGrowFactor, level);
         transform.localScale = new Vector3(size, size, 1);
         // refresh force/speed
-        moveSpeed = 1.5f * Mathf.Pow(1.7f, level);
+        moveSpeed = moveSpeed * Mathf.Pow(speedGrowFactor, level);
     }
-	public void eat()
-	{
-
-	}
     public void grow()
     {
         setSizeLevel(sizeLevel + 1);

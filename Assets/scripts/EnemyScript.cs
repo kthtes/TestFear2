@@ -39,19 +39,20 @@ public class EnemyScript :  PlayerScript
 		PlayerScript other = coll.gameObject.GetComponent<PlayerScript>();
 		if (other == null)
 			return;
-		Debug.Log("Eat! size:[" + sizeLevel+"] VS size:["+other.sizeLevel);
+		Debug.Log("Eat! size:[" + sizeLevel + "] VS size:[" + other.sizeLevel);
 		// 1. the larger one: grow
 		if (other.sizeLevel > sizeLevel)
 		{
-			Debug.Log("Eat! will destroy:"+sizeLevel);
+			Debug.Log("Eat! will destroy:" + sizeLevel);
 			other.grow();
-			Destroy(gameObject);
-		}else
+			Destroy(gameObject, 0.5f);
+		}
+		else
 		{
 			Debug.Log("Eat! will destroy:" + other.sizeLevel);
-			Destroy(other.gameObject);
+			Destroy(other.gameObject, 0.5f);
 			grow();
 		}
-		// 2. the smaller one: destroy
+		//2.the smaller one: destroy
 	}
 }
