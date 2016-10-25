@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerScript : MonoBehaviour
+abstract public class PlayerScript : MonoBehaviour
 {  // You's attributes
     public int sizeLevel = 0;
 	public float moveSpeed = 1.5f;
@@ -13,12 +13,10 @@ public class PlayerScript : MonoBehaviour
         // 1. reset its size
         setSizeLevel(sizeLevel);
 	}
-
+	// abstract functions
+	abstract public Vector2 vel2();
+	abstract public Vector2 pos2();
     // public functions
-    public Vector2 position()
-    {
-        return new Vector2(transform.position.x, transform.position.y);
-    }
     virtual public void setSizeLevel(int level)
     {
         // validate level
@@ -34,6 +32,10 @@ public class PlayerScript : MonoBehaviour
         // refresh force/speed
         moveSpeed = 1.5f * Mathf.Pow(1.7f, level);
     }
+	public void eat()
+	{
+
+	}
     public void grow()
     {
         setSizeLevel(sizeLevel + 1);

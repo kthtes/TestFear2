@@ -47,7 +47,7 @@ public class YouScript : PlayerScript
 		// don't do this when vel is very small
 		if (Toolbox.Instance.velToSpd(rb.velocity) < 0.5f)
 			return;
-		float theta = Mathf.Atan2(rb.velocity.y, rb.velocity.x);
+		float theta = Mathf.Atan2(vel2().y, vel2().x);
 		transform.rotation = Quaternion.Euler(0, 0, theta * 180.0f / Mathf.PI);
 	}
 
@@ -55,5 +55,14 @@ public class YouScript : PlayerScript
 	{
 		base.setSizeLevel(level);
 		moveForce = 4.0f * Mathf.Pow(1.4f, level);
+	}
+	override public Vector2 pos2()
+	{
+		return new Vector2(transform.position.x, transform.position.y);
+	}
+	override public Vector2 vel2()
+	{
+		Rigidbody2D rb = GetComponent<Rigidbody2D>();
+		return new Vector2(rb.velocity.x, rb.velocity.y);
 	}
 }

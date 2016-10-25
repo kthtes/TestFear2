@@ -12,8 +12,9 @@ public class CameraScript : MonoBehaviour
 	void Start() {
 	}
 
-	void follow(Vector2 pos)
+	void follow(Vector3 pos)
 	{
+
 		Camera camera = GetComponent<Camera>();
 		Vector3 viewPoint = camera.WorldToViewportPoint(new Vector3(pos.x, pos.y, 0));
 		Vector3 worldPoint = camera.ViewportToWorldPoint(viewPoint);
@@ -32,7 +33,7 @@ public class CameraScript : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		follow(player.position());
+		follow(player.transform.position);
 		// get mouse input (zoom in/out)
 		float wheel = Input.GetAxis("Mouse ScrollWheel");
 		if (wheel != 0)
