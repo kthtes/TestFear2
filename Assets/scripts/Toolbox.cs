@@ -11,6 +11,11 @@ public class Toolbox : Singleton<Toolbox>
         // Your initialization code here
     }
 
+	public float velToSpd(Vector2 vel)
+	{
+		return Mathf.Sqrt(vel.x * vel.x + vel.y * vel.y);
+	}
+
     public Vector2 confineVelocity(float speed, Vector2 vel)
     {
         float curSpeed = Mathf.Sqrt(vel.x * vel.x + vel.y * vel.y);

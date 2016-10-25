@@ -5,7 +5,7 @@ public class PlayerScript : MonoBehaviour
 {  // You's attributes
     public int sizeLevel = 0;
 	public float moveSpeed = 1.5f;
-	public float theta = 0.0f;
+	public float someFloat;
 
 	// Use this for initialization
 	void Start ()
@@ -34,12 +34,6 @@ public class PlayerScript : MonoBehaviour
         // refresh force/speed
         moveSpeed = 1.5f * Mathf.Pow(1.7f, level);
     }
-	protected void adjustFace()
-	{
-		Rigidbody2D rb = GetComponent<Rigidbody2D>();
-		theta = Mathf.Atan2(rb.velocity.y, rb.velocity.x);
-		transform.rotation = Quaternion.Euler(0, 0, theta*180.0f/Mathf.PI);
-	}
     public void grow()
     {
         setSizeLevel(sizeLevel + 1);

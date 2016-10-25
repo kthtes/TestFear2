@@ -24,4 +24,9 @@ public class EnemyScript : PlayerScript
 		// adjust face direction
 		adjustFace();
     }
+	void adjustFace()
+	{
+		float theta = Mathf.Atan2(player.position().y - transform.position.y, player.position().x - transform.position.x);
+		transform.rotation = Quaternion.Euler(0, 0, theta * 180.0f / Mathf.PI);
+	}
 }

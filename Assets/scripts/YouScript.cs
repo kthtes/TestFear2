@@ -41,6 +41,16 @@ public class YouScript : PlayerScript
 			bleed();
 	}
 
+	void adjustFace()
+	{
+		Rigidbody2D rb = GetComponent<Rigidbody2D>();
+		// don't do this when vel is very small
+		if (Toolbox.Instance.velToSpd(rb.velocity) < 0.5f)
+			return;
+		float theta = Mathf.Atan2(rb.velocity.y, rb.velocity.x);
+		transform.rotation = Quaternion.Euler(0, 0, theta * 180.0f / Mathf.PI);
+	}
+
 	override public void setSizeLevel(int level)
 	{
 		base.setSizeLevel(level);
