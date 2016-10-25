@@ -156,7 +156,7 @@ class Navigation2D(EditorWindow):
         
     # Gizmo ####################################################################
     static needs_rebuild = false
-    static gizmesh = Mesh()
+    static gizmesh as Mesh
     static def rebuild_gizmesh(nm as NavMeshTriangulation):
         if not gizmesh: # is cleared after stopping the game
             gizmesh = Mesh()

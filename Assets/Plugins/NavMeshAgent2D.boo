@@ -71,9 +71,11 @@ class NavMeshAgent2D(MonoBehaviour):
             agent.enabled = false
     
     # Radius Gizmo #############################################################
+    # (gizmos.matrix for correct rotation)
     def OnDrawGizmosSelected():
         Gizmos.color = Color.green
-        Gizmos.DrawWireSphere(transform.position, radius)
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale)
+        Gizmos.DrawWireSphere(Vector3.zero, radius)
     
     # NavMeshAgent proxy functions #############################################
     # .destination property that forwards it to the agent

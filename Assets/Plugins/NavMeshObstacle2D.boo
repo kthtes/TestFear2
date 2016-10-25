@@ -4,6 +4,7 @@ import UnityEngine
 class NavMeshObstacle2D(MonoBehaviour):
     
     # navmeshobstacle properties
+    public shape = NavMeshObstacleShape.Box
     public center = Vector2.zero
     public size = Vector2.one
     
@@ -30,6 +31,7 @@ class NavMeshObstacle2D(MonoBehaviour):
         g = GameObject.CreatePrimitive(PrimitiveType.Cylinder)
         g.name = "PATH2D_OBSTACLE"
         g.transform.position = project_to_3d(transform.position)
+        g.transform.rotation = Quaternion.Euler(rotation_to_3d(transform.eulerAngles))
         obst = g.AddComponent[of NavMeshObstacle]()
         # disable navmesh and collider (no collider for now...)
         Destroy(obst.GetComponent[of Collider]())
@@ -63,13 +65,21 @@ class NavMeshObstacle2D(MonoBehaviour):
             obst.enabled = false
     
     # Radius Gizmo #############################################################
+    # (gizmos.matrix for correct rotation)
     def OnDrawGizmosSelected():
         Gizmos.color = Color.green
-        Gizmos.DrawWireCube(transform.position, transform.TransformVector(size))    
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale)
+        Gizmos.DrawWireCube(Vector3.zero, size) 
     
     # NavMeshObstacle proxy functions ##########################################
     public velocity as Vector2:
         get:
             return project_to_2d(obst.velocity)
         # set: is a bad idea
+
+    # validation
+    def OnValidate():
+        # force shape to box for now because we would need a separate Editor GUI
+        # script to switch between size and radius otherwise
+        shape = NavMeshObstacleShape.Box
     
