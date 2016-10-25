@@ -18,9 +18,10 @@ public class EnemyScript : PlayerScript
         Vector2 myPos = new Vector2(transform.position.x, transform.position.y);
         float dx = pos.x - myPos.x;
         float dy = pos.y - myPos.y;
-        Rigidbody2D rb;
-        rb = GetComponent<Rigidbody2D>();
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(dx < 0 ? -moveSpeed : moveSpeed, dy < 0 ? -moveSpeed : moveSpeed);
         rb.velocity = Toolbox.Instance.confineVelocity(moveSpeed, rb.velocity);
+		// adjust face direction
+		adjustFace();
     }
 }

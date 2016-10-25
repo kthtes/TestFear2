@@ -29,6 +29,9 @@ public class YouScript : PlayerScript
 		Rigidbody2D rb = GetComponent<Rigidbody2D>();
 		rb.velocity = Toolbox.Instance.confineVelocity(moveSpeed, rb.velocity);
 
+		// adjust rotation
+		adjustFace();
+
 		// for debug: G=Grow, R=Reduce
 		if (Input.GetKeyUp(KeyCode.G))
 			grow();
