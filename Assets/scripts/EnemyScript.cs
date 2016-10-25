@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyScript : MonoBehaviour
-{  //Enemy movement
-    public float moveSpeed = 2.0f;
-    public float size = 0.3f;
-    public PlayerScript player;
+public class EnemyScript : PlayerScript
+{  
+    public YouScript player;
 
     // Use this for initialization
     void Start()

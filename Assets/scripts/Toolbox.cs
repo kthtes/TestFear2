@@ -20,7 +20,10 @@ public class Toolbox : Singleton<Toolbox>
         return new Vector2(speed * Mathf.Cos(theta), speed * Mathf.Sin(theta));
     }
 
-
+	public float confine(float min, float x, float max)
+	{
+		return Mathf.Max(min, Mathf.Min(x, max));
+	}
     // (optional) allow runtime registration of global objects
     //static public T RegisterComponent<T>() where T : Component
     //{
