@@ -1,46 +1,60 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 abstract public class PlayerScript : MonoBehaviour
 {  // You's attributes
-    public int sizeLevel = 0;
-	public float sizeGrowFactor = 1.5f;
-	public float speedGrowFactor = 1.7f;
-	public float moveSpeed = 1.5f;
-	public float someFloat;
+	public float eatAbsorbFactor = 0.5f;
+	public float speedGrowFactor = 0.5f;
+	public float radius0 = 0.1f;
+	public float moveSpeed0 = 1.5f;	// the move speed of radius==0.1
 
-	// Use this for initialization
-	void Start ()
-    {
-        // 1. reset its size
-        setSizeLevel(sizeLevel);
-	}
-	// abstract functions
+	protected float radius;			// go with scale
+	protected float moveSpeed;			// go with scale
+
+	// property functions
 	abstract public Vector2 vel2();
 	abstract public Vector2 pos2();
-    // public functions
-    virtual public void setSizeLevel(int level)
+	public float rad1() { return radius; }
+
+	// Use this for initialization
+	virtual protected void Start()
+	{
+		radius = transform.localScale.x;
+		applyRadiusChange();
+	}
+	virtual protected void Update()
+	{
+		Dictionary<string, float> dict = new Dictionary<string, float>();
+		dict.Add("r", radius);
+		dict.Add("x", pos2().x);
+		dict.Add("y", pos2().y);
+		Toolbox.Instance.playerData[name] = dict;
+	}
+	virtual protected void applyRadiusChange()
+	{
+		transform.localScale = new Vector3(radius, radius, transform.localScale.z);
+		moveSpeed = moveSpeed0 * (radius / radius0) * speedGrowFactor;
+	}
+
+	// action functions
+	public void eat(float otherRadius)
+	{
+		float destArea = Mathf.PI * radius * radius + eatAbsorbFactor * Mathf.PI * otherRadius * otherRadius;
+		radius = Mathf.Sqrt(destArea / Mathf.PI);
+		applyRadiusChange();
+	}
+    public void grow(float by=0.1f)
     {
-        // validate level
-        if (level < 0 || level >= 9)
-        {
-            Debug.LogWarning("PlayerScript.setSizeLevel(): sizeLevel must >=0 and < 9!!!");
-            return;
-        }
-        // set size level
-        sizeLevel = level;
-        float size = 0.1f * Mathf.Pow(sizeGrowFactor, level);
-        transform.localScale = new Vector3(size, size, 1);
-        // refresh force/speed
-        moveSpeed = moveSpeed * Mathf.Pow(speedGrowFactor, level);
+		radius += by;
+		radius = Mathf.Min(10.0f, radius);
+		applyRadiusChange();
     }
-    public void grow()
+    public void reduce(float by=0.1f)
     {
-        setSizeLevel(sizeLevel + 1);
-    }
-    public void reduce()
-    {
-        setSizeLevel(sizeLevel - 1);
+		radius -= by;
+		radius = Mathf.Max(0.01f, radius);
+		applyRadiusChange();
     }
     public void bleed()
     {

@@ -33,7 +33,9 @@ public class CameraScript : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		follow(player.transform.position);
+		// when "you" are still there
+		if(player)
+			follow(player.transform.position);
 		// get mouse input (zoom in/out)
 		float wheel = Input.GetAxis("Mouse ScrollWheel");
 		if (wheel != 0)
