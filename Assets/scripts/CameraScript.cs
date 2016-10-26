@@ -45,5 +45,4 @@ public class CameraScript : MonoBehaviour
 		else if (Input.GetKeyDown(KeyCode.DownArrow))
 			zoom(true, 0.1f);
 	}
-
 }

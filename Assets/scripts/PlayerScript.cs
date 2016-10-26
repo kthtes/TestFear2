@@ -7,10 +7,12 @@ abstract public class PlayerScript : MonoBehaviour
 	public float eatAbsorbFactor = 0.5f;
 	public float speedGrowFactor = 0.5f;
 	public float radius0 = 0.1f;
-	public float moveSpeed0 = 1.5f;	// the move speed of radius==0.1
+	public float moveSpeed0 = 1.5f;		// the move speed of radius==0.1
 
-	protected float radius;			// go with scale
-	protected float moveSpeed;			// go with scale
+	protected float radius;				// go with scale
+	protected float moveSpeed;          // go with scale
+
+	protected float senRadius;			// changed with radius, now it is 2.0f*radius
 
 	// property functions
 	abstract public Vector2 vel2();
@@ -29,12 +31,14 @@ abstract public class PlayerScript : MonoBehaviour
 		dict.Add("r", radius);
 		dict.Add("x", pos2().x);
 		dict.Add("y", pos2().y);
+		dict.Add("sen", senRadius);
 		Toolbox.Instance.playerData[name] = dict;
 	}
 	virtual protected void applyRadiusChange()
 	{
 		transform.localScale = new Vector3(radius, radius, transform.localScale.z);
 		moveSpeed = moveSpeed0 * (radius / radius0) * speedGrowFactor;
+		senRadius = 2.0f * radius;
 	}
 
 	// action functions

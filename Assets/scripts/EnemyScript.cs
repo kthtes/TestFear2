@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
+using System.Collections.Generic;
 
 public class EnemyScript :  PlayerScript
 {  
     public YouScript player;
-	public float senRadius;	// sensitive radius
 
 	NavMeshAgent2D nav;
 
@@ -33,6 +32,7 @@ public class EnemyScript :  PlayerScript
 	// AI part: decide 1.flee? 2.chase? 3.roam!
 	char decide()
 	{
+		
 		return 'r';
 	}
 	void flee()
