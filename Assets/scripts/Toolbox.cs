@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -31,6 +33,13 @@ public class Toolbox : Singleton<Toolbox>
 	public float confine(float min, float x, float max)
 	{
 		return Mathf.Max(min, Mathf.Min(x, max));
+	}
+	public Dictionary<string,float> playerDataAt(int index)
+	{
+		string[] keys = new string[playerData.Keys.Count];
+		playerData.Keys.CopyTo(keys,0);
+		Array.Sort(keys);
+		return playerData[keys[index]];
 	}
 }
 
