@@ -3,21 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class EnemyScript :  PlayerScript
-{  
-    public YouScript player;
+{
+	// Behavior 
+	public bool eater=false;
+	public bool fleer=false;
+	public bool roamer=true;
 
-	NavMeshAgent2D nav;
+	// current mode: [idle, eat, flee, roam]
+	public string mode="idle";
+
+	// roam center pos
+	Vector2 roamCenter=Vector2.zero;
 
 	Dictionary <string,Dictionary<string,float>> playerData;
 
-	public string mode="roam";
-
-	Vector2 roamPos=Vector2.zero;		// the center of roaming position
-	Vector2 roamPos1=Vector2.zero;		// the temp target of curent roam action
-
 	override protected void Start()
 	{
-		nav = GetComponent<NavMeshAgent2D>();
 		// put base' same function in the last!
 		base.Start();
 		// set playerData
@@ -28,39 +29,36 @@ public class EnemyScript :  PlayerScript
     {
 		// call base at last
 		base.Update();
+		// TODO: set speed if roaming
+
 		// make a move
 		decide();
 		adjustFace();
-		//
-
     }
-	void adjustFace()
-	{		
-		float theta = Mathf.Atan2(nav.velocity.y, nav.velocity.x);
-		transform.rotation = Quaternion.Euler(0, 0, theta * 180.0f / Mathf.PI);
-	}
 
 	// AI part: decide 1.flee? 2.chase? 3.roam!
 	void decide()
 	{
 		// 1. flee if necessary
-//		Dictionary<string, float> dan=dangeOne();
-//		if (dan!=null) {
-//			fleeFrom (dan["x"],dan["y"]);
-//			return;
-//		}
-//		// 2. chase if necessary
-//		Dictionary<string,float> eat=edibleOne();
-//		if (eat!=null) {
-//			chaseFor (eat["x"],eat["y"]);
-//			return;
-//		}
+		Dictionary<string, float> dan=dangeOne();
+		if (fleer && dan!=null) {
+			fleeFrom (dan["x"],dan["y"]);
+			return;
+		}
+		// 2. chase if necessary
+		Dictionary<string,float> eat=edibleOne();
+		if (eater && eat!=null) {
+			chaseFor (eat["x"],eat["y"]);
+			return;
+		}
 		// 3. roam
-		roam();
+		if(roamer)
+			roam();
 	}
 	void chasePlayer(){
 		mode = "chase";
-		nav.SetDestination (player.pos2 ());
+		Vector2 pos = new Vector2 (playerData ["You"] ["x"], playerData ["You"] ["y"]);
+		nav.SetDestination (pos);
 		// set auto repath
 		nav.agent.autoRepath = true;
 	}
@@ -69,11 +67,11 @@ public class EnemyScript :  PlayerScript
 		mode = "flee";
 		// TODO: give it a random factor
 		Vector2 dir=new Vector2(pos2().x-x, pos2().y-y);
-		Vector2 newDir = Toolbox.Instance.vectorRotate (dir, pos2 (), Random.Range (-0.25f * Mathf.PI, 0.25f * Mathf.PI));
-		nav.SetDestination (newDir - dir);
+		Vector2 newDir = Toolbox.Instance.vectorRotate (dir, pos2 (), Random.Range (-0.2f * Mathf.PI, 0.2f * Mathf.PI));
+		nav.SetDestination (1.5f*(newDir - dir));
 		// give the nav a "autoBrake"
-		nav.autoBraking=true;
-		// 
+		nav.autoBraking=false;
+		nav.agent.autoRepath = false;
 	}
 	void chaseFor(float x, float y)
 	{
@@ -81,19 +79,21 @@ public class EnemyScript :  PlayerScript
 		nav.SetDestination (new Vector2 (x, y));
 		// do not autoBrake
 		nav.autoBraking=false;
+		nav.agent.autoRepath = false;
 	}
 	void roam()
 	{
 		if (mode != "roam") {
 			mode = "roam";
-			roamPos = pos2 ();
-			roamPos1 = Vector2.zero;
-		}
-		// now we have roamPos
-		if (roamPos1 == Vector2.zero || roamCloseToDest ()) {
-			roamPos1 = roamGenPos (roamPos);
-			nav.SetDestination (roamPos1);
+			roamCenter = pos2 ();
+			nav.SetDestination (roamGenPos (roamCenter));
 			nav.autoBraking = true;
+			return;
+		}
+		if (nav.agent.remainingDistance < 0.1f) {			
+			nav.SetDestination (roamGenPos (roamCenter));
+			nav.autoBraking = true;
+			return;
 		}
 	}
 	Vector2 roamGenPos(Vector2 pos){
@@ -140,15 +140,6 @@ public class EnemyScript :  PlayerScript
 		return null;
 	}
 	// end of AI part
-
-	override public Vector2 vel2()
-	{
-		return new Vector2(nav.velocity.x, nav.velocity.y);
-	}
-	public override Vector2 pos2()
-	{
-		return new Vector2(transform.position.x, transform.position.y);
-	}
 
 	// we do collision detecting only in enemy, since enemy eats enemy and You
 	void OnCollisionEnter2D(Collision2D coll)
