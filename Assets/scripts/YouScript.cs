@@ -18,7 +18,7 @@ public class YouScript : PlayerScript
 	override protected void applyRadiusChange()
 	{
 		// moveForce
-		moveForce = (transform.localScale.x / radius0) * moveForce0 * moveForceGrowFactor;
+		moveForce = (transform.localScale.x / scale0) * moveForce0 * moveForceGrowFactor;
 		// call base at last
 		base.applyRadiusChange();
 	}

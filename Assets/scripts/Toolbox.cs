@@ -34,12 +34,29 @@ public class Toolbox : Singleton<Toolbox>
 	{
 		return Mathf.Max(min, Mathf.Min(x, max));
 	}
-	public Dictionary<string,float> playerDataAt(int index)
-	{
+	public string playerNameAt(int index){
 		string[] keys = new string[playerData.Keys.Count];
 		playerData.Keys.CopyTo(keys,0);
 		Array.Sort(keys);
-		return playerData[keys[index]];
+		return keys [index];
+	}
+	public Dictionary<string,float> playerDataAt(int index)
+	{
+		return playerData[playerNameAt(index)];
+	}
+	public Dictionary<string,float> playerDataNamed(string name){
+		return playerData [name];
+	}
+	public float playerDist(string n1, string n2){
+		Vector2 pos1 = new Vector2 (playerData [n1] ["x"], playerData [n1] ["y"]);
+		Vector2 pos2 = new Vector2 (playerData [n2] ["x"], playerData [n2] ["y"]);
+		return Vector2.Distance (pos1, pos2);
+	}
+	public Vector2 vectorRotate(Vector2 p1, Vector2 center, float angle)  
+	{  
+		float x1 = (p1.x - center.x) * Mathf.Cos(angle) + (p1.y - center.y) * Mathf.Sin(angle) + center.x;  
+		float y1 = -(p1.x - center.x) * Mathf.Sin(angle) + (p1.y - center.y) * Mathf.Cos(angle) + center.y;  
+		return new Vector2 (x1, y1);
 	}
 }
 
