@@ -8,10 +8,12 @@ public class YouScript : PlayerScript
 
 	float moveForce;
 
+	NavMeshAgent2D nav;
+
 	protected override void Start()
 	{
 		// TODO - own start()
-
+		nav=GetComponent<NavMeshAgent2D>();
 		// put base' function in the last line!
 		base.Start();
 	}
@@ -23,18 +25,35 @@ public class YouScript : PlayerScript
 		base.applyRadiusChange();
 	}
 
+	bool closeEnough(){
+		float lim = Mathf.Max (0.3f*rad1(),0.2f);
+		return Vector2.Distance (nav.destination, pos2 ()) < lim;
+	}
+
 	// Update is called once per frame
 	override protected void Update()
 	{
 		// Keyboard --> change forces
-		onDirection(0, Input.GetKey(KeyCode.W));
-		onDirection(1, Input.GetKey(KeyCode.D));
-		onDirection(2, Input.GetKey(KeyCode.S));
-		onDirection(3, Input.GetKey(KeyCode.A));
+//		onDirection(0, Input.GetKey(KeyCode.W));
+//		onDirection(1, Input.GetKey(KeyCode.D));
+//		onDirection(2, Input.GetKey(KeyCode.S));
+//		onDirection(3, Input.GetKey(KeyCode.A));
+//
+//		// check speed limit
+//		Rigidbody2D rb = GetComponent<Rigidbody2D>();
+//		rb.velocity = Toolbox.Instance.confineVelocity(moveSpeed, rb.velocity);
 
-		// check speed limit
-		Rigidbody2D rb = GetComponent<Rigidbody2D>();
-		rb.velocity = Toolbox.Instance.confineVelocity(moveSpeed, rb.velocity);
+		// mouse click left
+		if (Input.GetMouseButton (0)) {
+			Vector3 dest = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+			Vector2 dest2 = new Vector2 (dest.x, dest.y);
+			nav.SetDestination (dest2);
+			nav.Resume ();
+		}
+		if (closeEnough ())
+			nav.Stop ();
+		
+			
 
 		// adjust rotation
 		adjustFace();
