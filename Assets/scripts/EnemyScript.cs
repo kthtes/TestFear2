@@ -32,6 +32,7 @@ public class EnemyScript :  PlayerScript
 		decide();
 		adjustFace();
 		//
+
     }
 	void adjustFace()
 	{		
@@ -43,25 +44,25 @@ public class EnemyScript :  PlayerScript
 	void decide()
 	{
 		// 1. flee if necessary
-		Dictionary<string, float> dan=dangeOne();
-		if (dan!=null) {
-			Debug.Log (name + " will flee!");
-			fleeFrom (dan["x"],dan["y"]);
-			return;
-		}
-		// 2. chase if necessary
-		Dictionary<string,float> eat=edibleOne();
-		if (eat!=null) {
-			Debug.Log (name + " will chase! ");
-			chaseFor (eat["x"],eat["y"]);
-			return;
-		}
+//		Dictionary<string, float> dan=dangeOne();
+//		if (dan!=null) {
+//			fleeFrom (dan["x"],dan["y"]);
+//			return;
+//		}
+//		// 2. chase if necessary
+//		Dictionary<string,float> eat=edibleOne();
+//		if (eat!=null) {
+//			chaseFor (eat["x"],eat["y"]);
+//			return;
+//		}
 		// 3. roam
-		//roam();
+		roam();
 	}
 	void chasePlayer(){
 		mode = "chase";
 		nav.SetDestination (player.pos2 ());
+		// set auto repath
+		nav.agent.autoRepath = true;
 	}
 	void fleeFrom(float x, float y)
 	{
@@ -72,6 +73,7 @@ public class EnemyScript :  PlayerScript
 		nav.SetDestination (newDir - dir);
 		// give the nav a "autoBrake"
 		nav.autoBraking=true;
+		// 
 	}
 	void chaseFor(float x, float y)
 	{
@@ -113,13 +115,6 @@ public class EnemyScript :  PlayerScript
 			float r1 = playerData [oneName] ["r"];
 			float sen1 = playerData [oneName] ["sen"];
 			float dist = Toolbox.Instance.playerDist (oneName, name);
-			if (name == "Enemy1") {
-				Debug.Log ("E1: ");
-				Debug.Log (r1);
-				Debug.Log (sen1);
-				Debug.Log (dist);
-				Debug.Log ("Now" + rad1());
-			}
 			if (r1 > rad1() && dist < sen1)
 				return playerData [oneName];
 		}

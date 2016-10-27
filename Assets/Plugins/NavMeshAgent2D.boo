@@ -11,8 +11,8 @@ class NavMeshAgent2D(MonoBehaviour):
     public autoBraking as bool = false
     
     # the projection
-    agent as NavMeshAgent
-    
+    public agent as NavMeshAgent
+
     # project agent position to 2D
     def project_to_2d(v as Vector3):
         return Vector2(v.x, v.z)

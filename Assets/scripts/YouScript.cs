@@ -9,6 +9,7 @@ public class YouScript : PlayerScript
 	float moveForce;
 
 	NavMeshAgent2D nav;
+	public NavMeshPathStatus pathStatus;
 
 	protected override void Start()
 	{
@@ -49,6 +50,7 @@ public class YouScript : PlayerScript
 			Vector2 dest2 = new Vector2 (dest.x, dest.y);
 			nav.SetDestination (dest2);
 			nav.Resume ();
+			pathStatus = nav.agent.pathStatus;
 		}
 		if (closeEnough ())
 			nav.Stop ();
